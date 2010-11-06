@@ -1,0 +1,21 @@
+%h1 Login
+
+- if session[:error]
+	.errors
+		= session.delete(:error)
+
+%form(action="/login" method="post")
+	%p
+		%label(for="username") Your username
+		%br
+		%input(type="text" name="username" id="username" value="#{params[:username]}")/
+	
+	%p
+		%label(for="password") Your password
+		%br
+		%input(type="password" name="password" id="password")/
+	
+	%p
+		%button(type="submit")
+			Login
+			

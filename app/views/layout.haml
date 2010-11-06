@@ -1,0 +1,30 @@
+!!! Strict
+%html
+	%head
+		%title= [@title, "Bell - A CRC Application"].compact.join(" - ")
+		%meta{:"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}/
+		%link{:rel => "stylesheet", :href => "/css/reset.css", :type => "text/css"}/
+		%link{:rel => "stylesheet", :href => "/css/main.css", :type => "text/css"}/
+
+	%body(class="#{logged_in? ? "logged_in" : nil}")
+		#header
+			#navigation
+		
+				%ul
+					- if logged_in?
+						%li
+							Logged in as #{current_user}
+						%li
+							%a(href="/") Home
+						%li
+							%a(href="/logout") Logout
+					- else
+						%li
+							%a(href="/") Home
+						%li
+							%a(href="/signup") Sign Up
+						%li
+							%a(href="/login") Login
+			#content		
+			
+		!= yield
