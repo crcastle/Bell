@@ -7,7 +7,6 @@ class Number < Ohm::Model
   
   def validate
     assert_unique :did
-    assert_numeric :did_owner
   end
-  
+
 end

@@ -1,0 +1,10 @@
+- if session[:notice]
+	= session.delete(:notice)
+
+#grid
+
+	!= list(@name, @type, @exten)
+	
+#footer
+	%p
+		This is the Bell phone app.
