@@ -10,6 +10,8 @@ class User < Ohm::Model
   attribute :salt
   # what else does a user need?
   
+  set Voicemail, Phone, Number
+  
   index :username
   
   def validate
@@ -31,6 +33,21 @@ class User < Ohm::Model
     value = value.empty? ? nil : encrypt(value, salt)
     
     write_local(:password, value)
+  end
+  
+  # returns an array of Voicemails for this user
+  def voicemails_received
+    Voicemail.find(:for_user, id)
+  end
+  
+  # returns an array of Phones for this user
+  def phones
+    Phone.find(:phone_owner, id)
+  end
+  
+  # returns an array of Numbers for this user
+  def numbers
+    Numbers.find(:did_owner, id)
   end
   
   def to_s
