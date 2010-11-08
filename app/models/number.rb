@@ -1,6 +1,6 @@
 class Number < Ohm::Model
-  attrib :did
-  attrib :did_owner
+  attribute :did
+  attribute :did_owner
   
   index :did
   index :did_owner

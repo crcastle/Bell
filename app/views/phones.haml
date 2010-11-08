@@ -1,0 +1,39 @@
+- if session[:notice]
+	= session.delete(:notice)
+
+- if logged_in?
+	%h1
+		#{@owner_name}'s phones
+
+	#grid
+
+		!= list(@phones)
+	
+	#footer
+		%p
+			This is the Bell phone app.
+		
+- else
+	%fieldset
+		%legend Have we met?
+
+		%p
+			%input(type="radio" name="session[existing]" id="session_existing_yes" value=1 checked=true)
+			%label(for="session_existing_yes") I'm already registered
+
+			%input(type="radio" name="session[existing]" id="session_existing_no" value=0)
+			%label(for="session_existing_no") I'm new here
+
+		%p
+			%label(for="session_username") Your username
+			%br
+			%input(type="text" name="session[username]" id="session_username")
+
+		%p
+			%label(for="session_password") Your password
+			%br
+			%input(type="text" name="session[password]" id="session_password")
+
+		%p
+			%button(type="submit")
+				Submit

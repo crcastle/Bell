@@ -1,10 +1,10 @@
-- if session[:notice]
-	= session.delete(:notice)
-
-#grid
-
-	!= list(@name, @type, @exten)
-	
-#footer
+- if phones.any?
+	%ul
+		- phones.each do |phone|
+			!= phone.name
+			!= phone.type
+			!= phone.exten
+- else
 	%p
-		This is the Bell phone app.
+		= message
+		

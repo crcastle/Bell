@@ -10,7 +10,9 @@ class User < Ohm::Model
   attribute :salt
   # what else does a user need?
   
-  set Voicemail, Phone, Number
+  set :voicemails, Voicemail
+  set :phones, Phone
+  set :numbers, Number
   
   index :username
   
@@ -42,7 +44,7 @@ class User < Ohm::Model
   
   # returns an array of Phones for this user
   def phones
-    Phone.find(:phone_owner, id)
+    Phone.find(:phone_owner => id)
   end
   
   # returns an array of Numbers for this user

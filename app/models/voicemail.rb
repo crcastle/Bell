@@ -1,10 +1,10 @@
 class Voicemail < Ohm::Model
-  attrib :caller_id
-  attrib :called_id
-  attrib :url
-  attrib :datetime
-  attrib :for_user
-  attrib :is_read
+  attribute :caller_id
+  attribute :called_id
+  attribute :url
+  attribute :datetime
+  attribute :for_user
+  attribute :is_read
   
   index :called_id
   index :datetime
@@ -27,7 +27,7 @@ class Voicemail < Ohm::Model
   # convert the url to the proper form if it's not empty
   # and is not already of the proper form.
   def url=(value)
-    value = "http://#{value}" unless value.empty? || value =~ %r{^http://} || value ~= %r{^https://}
+    value = "http://#{value}" unless value.empty? || value =~ %r{^http://} || value =~ %r{^https://}
     write_local(:url, value)
   end
 end

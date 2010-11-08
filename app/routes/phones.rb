@@ -1,7 +1,11 @@
 class Main
   # show the phones for a user
   get "/phones" do
-    haml :"phones/list"
+    @owner = User[session[:user]]
+    @owner_name = @owner.username
+    @phones = @owner.phones
+    
+    haml :"phones"
   end
   
   # show the details for a phone
@@ -15,15 +19,15 @@ class Main
     
     haml :"phones/id"
   end
-  
+
   # add a new phone to an account
   post "/phones" do
     
   end
   
   module Helpers
-    def list(name, type, exten)
-      partial(:"phone/list", :name => name, :type => type, :exten => exten)
+    def list(phones, message = "You don't have any phones! Set one up?")
+      partial(:"phones/list", :phones => phones, :message => message)
     end
   end
   
