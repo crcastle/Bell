@@ -7,7 +7,7 @@ class Main
   post "/login" do
     begin
       authenticate(params)
-      redirect "/"
+      redirect_to_stored
     rescue
       session[:error] = "We are sorry: the information supplied is not valid."
       haml :"login"
@@ -45,6 +45,7 @@ class Main
         return true
       else
         session[:return_to] = request.fullpath
+        session[:error] = "You need to login first!"
         redirect "/login"
         return false
       end

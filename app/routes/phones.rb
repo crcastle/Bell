@@ -1,6 +1,8 @@
 class Main
   # show the phones for a user
   get "/phones" do
+    require_login
+    
     @owner = User[session[:user]]
     @owner_name = @owner.username
     @phones = @owner.phones
