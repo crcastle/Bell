@@ -1,10 +1,10 @@
 - if phones.any?
 	%ul
 		- phones.each do |phone|
-			!= phone.name
-			!= phone.type
-			!= phone.exten
+			%li
+				!= phone.name
+				!= phone.type
+				!= phone.exten
 - else
 	%p
 		= message
-		

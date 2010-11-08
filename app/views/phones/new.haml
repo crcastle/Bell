@@ -1,0 +1,29 @@
+%h1 Register a new phone
+
+- errors_on @phone do |error|
+	- error.on [:name, :not_present], "Please provide a name."
+	- error.on [:exten, :not_present], "Please provide a extension or phone number."
+	- error.on [:type, :not_present], "Please select a phone type."
+
+%form(action="/phones" method="post")
+	%p
+		%label(for="phone_name") Name
+		%span.example e.g. "Chris's mobile phone"
+		%br
+		%input(name="phone[name]" id="phone_name" value="#{@phone.name}")
+		
+	%p
+		%label(for="phone_exten") Extension or Phone Number
+		%span.example e.g. 16178235295 or 85
+		%br
+		%input(name="phone[exten]" id="phone_exten" value="#{@phone.exten}")
+		
+	%p
+		%label(for="phone_type") Type
+		%span.example e.g. Mobile, Land, or SIP?
+		%br
+		%input(name="phone[type]" id="phone_type" value="#{@phone.type}")
+		
+	%p
+		%button(type="submit")
+			Submit

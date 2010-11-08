@@ -10,8 +10,33 @@ class Main
     haml :"phones"
   end
   
+  # add a new phone to an account
+  post "/phones" do
+    accept_login_or_signup
+    
+    @phone = Phone.new(params[:phone])
+    @phone.phone_owner = current_user.id if current_user
+
+    if @phone.valid?
+      @phone.create
+      session[:notice] = "Phone has been registered."
+      redirect "/phones"
+    else
+      haml :"phones/new"
+    end
+  end
+  
+  get "/phones/new" do
+    require_login
+    
+    @phone = Phone.new
+    haml :"phones/new"
+  end
+  
   # show the details for a phone
   get "/phones/:id" do
+    require_login
+    
     @phone = Phone[:params[:id]]
     
     @owner = User[@phone.phone_owner]
@@ -20,11 +45,6 @@ class Main
     @exten = @phone.exten
     
     haml :"phones/id"
-  end
-
-  # add a new phone to an account
-  post "/phones" do
-    
   end
   
   module Helpers
