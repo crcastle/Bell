@@ -1,0 +1,34 @@
+%h1 Add a new DID to the database
+
+%form(action="/numbers/add" method="post")
+	%p
+		%label(for="number_did") Number
+		%span.example Enter a number
+		%br
+		%input(name="number[did]" id="number_did" value="#{@number.did}")
+		
+	%p
+		%label(for="number_state") State
+		%span.example e.g. WA, CT, CA, etc.
+		%br
+		%input(name="number[state]" id="number_state" value="#{@number.state}")
+		
+	%p
+		%label(for="number_area_code") Area Code
+		%span.example e.g. 206, 860, 415, etc.
+		%br
+		%input(name="number[area_code]" id="number_area_code" value="#{@number.area_code}")
+		
+	%p
+		%button(type="submit")
+			Submit
+		
+%br
+%h2 Current Numbers
+	
+#grid
+	!= list_numbers(@numbers)
+	
+#footer
+	%p
+		This is the Bell phone app.

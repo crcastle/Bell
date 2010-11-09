@@ -2,7 +2,7 @@
 	%ul
 		- phones.each do |phone|
 			%li
-				!= phone.name
+				!= link_to_phone phone
 				!= phone.type
 				!= phone.exten
 - else

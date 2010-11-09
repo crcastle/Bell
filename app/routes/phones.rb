@@ -37,7 +37,7 @@ class Main
   get "/phones/:id" do
     require_login
     
-    @phone = Phone[:params[:id]]
+    @phone = Phone[params[:id]]
     
     @owner = User[@phone.phone_owner]
     @name = @phone.name
@@ -47,9 +47,34 @@ class Main
     haml :"phones/id"
   end
   
+  # update a phone
+  post "/phones/:id" do
+    accept_login_or_signup
+    
+    @phone = Phone[params[:id]]
+    
+    @phone.name = params[:phone][:name]
+    @phone.exten = params[:phone][:exten]
+    @phone.type = params[:phone][:type]
+    
+    if @phone.valid?
+      @phone.save
+      session[:notice] = "Phone has been modified."
+      redirect "/phones"
+    else
+      haml :"phones/id"
+    end
+  end
+  
   module Helpers
-    def list(phones, message = "You don't have any phones! Set one up?")
+    def list_phones(phones, message = "You don't have any phones! Set one up?")
       partial(:"phones/list", :phones => phones, :message => message)
+    end
+    
+    def link_to_phone(phone)
+      capture_haml do
+        haml_tag(:a, phone, :href => "/phones/#{phone.id}", :title => phone)
+      end
     end
   end
   

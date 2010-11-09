@@ -16,4 +16,8 @@ class Phone < Ohm::Model
     assert_numeric :phone_owner
   end
   
+  def to_s
+    name.to_s
+  end
+  
 end

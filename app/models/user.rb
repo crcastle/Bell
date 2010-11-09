@@ -39,7 +39,7 @@ class User < Ohm::Model
   
   # returns an array of Voicemails for this user
   def voicemails_received
-    Voicemail.find(:for_user, id)
+    Voicemail.find(:for_user => id)
   end
   
   # returns an array of Phones for this user
@@ -49,7 +49,7 @@ class User < Ohm::Model
   
   # returns an array of Numbers for this user
   def numbers
-    Numbers.find(:did_owner, id)
+    Number.find(:did_owner => id)
   end
   
   def to_s

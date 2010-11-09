@@ -1,0 +1,24 @@
+%h1 Purchase a new number
+
+%form(action="/numbers" method="post")
+	%p
+		%label(for="number_did") Number
+		%span.example Choose an available number
+		%br
+		- if @numbers.any?
+			%select(name="number[did]")
+		
+				- @numbers.each do |number|
+					!= number_option number
+					
+			%p
+				%button(type="submit")
+					Purchase
+			
+		- else
+			%p Howdy crap! No numbers available right now. Please check back later.
+			
+#footer
+	%p
+		This is the Bell phone app.
+			

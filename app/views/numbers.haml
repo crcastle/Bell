@@ -1,0 +1,17 @@
+-# List user's DIDs
+-# link to purchase a new DID
+
+- if session[:notice]
+	= session.delete(:notice)
+
+- if logged_in?
+	%h1
+		#{@owner_name}'s numbers
+
+	#grid
+
+		!= list_numbers(@numbers)
+
+	#footer
+		%p
+			This is the Bell phone app.

@@ -1,0 +1,22 @@
+- @title = format_number(@did)
+
+%h1 Number details
+
+%p
+	Number:
+	!= format_number(@did)
+%p
+	State:
+	!= @state
+	
+%form(action="/numbers/#{@id}" method="post")
+	%p
+		%button(type="submit")
+			Remove from my account
+		%button(type="button" onclick="javascript:document.location = '/numbers'")
+			Cancel
+			
+#footer
+	%p
+		This is the Bell phone app.
+					
