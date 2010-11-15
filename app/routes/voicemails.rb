@@ -17,7 +17,7 @@ class Main
   end
   
   # play voicemail
-  get "/voicemails/:id/play"
+  get "/voicemails/:id/play" do
     # check if voicemail :id belongs to current_user
     # play voicemail :id
     # mark voicemail :id as "not new"
