@@ -1,10 +1,12 @@
 # adapted from https://github.com/monkrb/reddit-clone/tree/master/app/models/
 require 'digest/sha1'
+require root_path("app/helpers/cloudvox_sip.rb")
 
 class User < Ohm::Model
   class WrongUsername < ArgumentError; end
   class WrongPassword < ArgumentError; end
-
+  class CloudvoxAppError < StandardError; end
+  
   attribute :username
   attribute :password
   attribute :salt
@@ -35,6 +37,13 @@ class User < Ohm::Model
     value = value.empty? ? nil : encrypt(value, salt)
     
     write_local(:password, value)
+  end
+  
+  def create
+    @cv = Cloudvox.new
+    
+    @json_response = @cv.create_app(user.id, self.phone_owner + "" + self.exten, self.cv_password)
+    
   end
   
   # returns an array of Voicemails for this user

@@ -5,6 +5,10 @@
 				!= link_to_phone phone
 				!= phone.type
 				!= phone.exten
+				!= phone.cv_username if phone.cv_username
+				!= phone.cv_password if phone.cv_username
 - else
 	%p
 		= message
+		%button(type="button" onclick="javascript:document.location = '/phones/new'")
+			Register New Phone

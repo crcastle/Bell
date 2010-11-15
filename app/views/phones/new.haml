@@ -20,9 +20,13 @@
 		
 	%p
 		%label(for="phone_type") Type
-		%span.example e.g. Mobile, Land, or SIP?
+		%span.example e.g. Mobile, landline, or SIP?  (question mark test to explain this)
 		%br
-		%input(name="phone[type]" id="phone_type" value="#{@phone.type}")
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_mobile", :value => "mobile", :checked => @phone.type == "mobile" ? true : nil} Mobile
+		%br
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_land", :value => "land", :checked => @phone.type == "land" ? true : nil} Landline
+		%br
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_sip", :value => "sip", :checked => @phone.type == "sip" ? true : nil} SIP
 		
 	%p
 		%button(type="submit")
