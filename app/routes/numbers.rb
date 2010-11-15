@@ -62,7 +62,14 @@ class Main
     
     @number = Number[params[:id]]
     
-    #@owner = User[@number.did_owner]
+    # if user trying to view a number he doesn't own
+    # so just redirect to numbers listing
+    if current_user.id != @number.did_owner
+      session[:error] = "Sorry, you can't edit a number you don't own."
+      redirect "/numbers"
+    end
+    
+    #@owner = User[@number.did_owner]    
     @did = @number.did
     @state = @number.state
     @id = params[:id]
@@ -74,6 +81,15 @@ class Main
     accept_login_or_signup
     
     @number = Number[params[:id]]
+    
+    # if user trying to edit a phone he doesn't own
+    # so just redirect to phones listing
+    if @number.did_owner != current_user.id
+      session[:error] = "Sorry, you can't edit a a number you don't own."
+      redirect "/numbers"
+    end
+    
+    # set owner as nil to make this number available
     @number.set_owner(nil) if @number.get_owner == current_user.id
     
     if @number.valid?

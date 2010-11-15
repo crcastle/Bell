@@ -39,6 +39,13 @@ class Main
     
     @phone = Phone[params[:id]]
     
+    # if user trying to view a phone he doesn't own
+    # so just redirect to phones listing
+    if current_user.id != @phone.phone_owner
+      session[:error] = "Sorry, you can't edit a phone you don't own."
+      redirect "/phones"
+    end
+    
     @owner = User[@phone.phone_owner]
     @name = @phone.name
     @type = @phone.type
@@ -52,6 +59,13 @@ class Main
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
+    
+    # if user trying to edit a phone he doesn't own
+    # so just redirect to phones listing
+    if @phone.phone_owner != current_user.id
+      session[:error] = "Sorry, you can't edit a a phone you don't own."
+      redirect "/phones"
+    end
     
     @phone.name = params[:phone][:name]
     @phone.exten = params[:phone][:exten]
