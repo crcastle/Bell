@@ -10,6 +10,7 @@ end
 
 require "monk/glue"
 require "ohm"
+#require "ohm/contrib"  # commented out because not using validations right now
 require "haml"
 require "sass"
 
