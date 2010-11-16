@@ -7,10 +7,11 @@ class User < Ohm::Model
   class WrongPassword < ArgumentError; end
   class CloudvoxAppError < StandardError; end
   
-  attribute :username
-  attribute :password
+  include Ohm::ExtraValidations
+  
+  attribute :username # TODO: make this require an email
+  attribute :password # TODO: make this require a minimum length
   attribute :salt
-  # what else does a user need?
   
   set :voicemails, Voicemail
   set :phones, Phone
@@ -19,8 +20,6 @@ class User < Ohm::Model
   index :username
   
   def validate
-    assert_present :username
-    assert_present :password
     assert_unique :username
   end
   
@@ -39,12 +38,12 @@ class User < Ohm::Model
     write_local(:password, value)
   end
   
-  def create
-    @cv = Cloudvox.new
-    
-    @json_response = @cv.create_app(user.id, self.phone_owner + "" + self.exten, self.cv_password)
-    
-  end
+  #def create
+  #  @cv = Cloudvox.new
+  #  
+  #  @json_response = @cv.create_app(user.id, self.phone_owner + "" + self.exten, self.cv_password)
+  #  
+  #end
   
   # returns an array of Voicemails for this user
   def voicemails_received
