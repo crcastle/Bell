@@ -8,7 +8,8 @@ class Main
     begin
       authenticate(params)
       redirect_to_stored
-    rescue
+    rescue Exception => e
+      logger.error("Exception in /login: " + e.message)
       session[:error] = "We are sorry: the information supplied is not valid."
       haml :"login"
     end

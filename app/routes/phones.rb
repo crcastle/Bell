@@ -105,11 +105,9 @@ class Main
     if @phone.is_sip?
       session[:notice] = "SIP phones do not need to be verified."
       redirect "/phones/" + params[:id].to_s
-    elsif @phone.is_mobile?
-      # ask user to enter 4-digit verification code
-      # explain that an SMS message will be sent with a 4 digit number
-      # ask the user to click the button (post) to send a message with verification code
-      # clicking the button clears any past verification code and creates a new one
+    elsif @phone.is_mobile?      
+      # display page with generate code button, text input for code, and submit button for text input
+      haml :"phones/verify"
     elsif @phone.is_land?
       # ask user to enter 4-digit verification code
       # explain that user's phone will ring and say a 4-digit number
@@ -129,12 +127,50 @@ class Main
       session[:notice] = "SIP phones do not need to be verified."
       redirect "/phones/" + params[:id].to_s
     elsif @phone.is_mobile?
-      # send SMS message
+      if params[:phone][:verification_code] == @phone.verification_code
+        @phone.verify!
+      else
+        session[:error] = "Verification code incorrect."
+        redirect "/phones/" + params[:id].to_s + "/verify"
+      end
     elsif @phone.is_land?
       # verify a landline phone with a call
     else
       redirect "/phones/" + params[:id].to_s
     end
+  end
+  
+  post "/phones/:id/verify/send" do
+    accept_login_or_signup
+    
+    @phone = Phone[params[:id]]
+    
+    # if user trying to edit a phone he doesn't own
+    # so just redirect to phones listing
+    if @phone.phone_owner != current_user.id
+      session[:error] = "Sorry, you can't verify a a phone you don't own."
+      redirect "/phones"
+    end
+    
+    if @phone.is_sip?
+      session[:notice] = "SIP phones do not need to be verified."
+      redirect "/phones/" + params[:id].to_s
+    elsif @phone.is_mobile?
+      @cv = Cloudvox.new
+      # send verification SMS
+      # @phone.verification_code gets set to nil if SMS isn't sent
+      @phone.verification_code = cv.send_code_to_mobile(@phone.exten)
+      # if @phone is valid, save it to the DB
+      @phone.save if @phone.valid?
+      # @phone.verification_code is nil which means SMS didn't get sent  
+      session[:error] = "Uh oh, something broke and the SMS message didn't get sent properly." unless @phone.verification_code
+    elsif @phone.is_land?
+      # verify a landline phone with a call
+    else
+      redirect "/phones/" + params[:id].to_s
+    end
+    
+    redirect "/phones/" + params[:id].to_s + "/verify"
   end
   
   module Helpers
@@ -148,9 +184,9 @@ class Main
       end
     end
     
-    def link_to_verify(text)
-      cature_haml do
-        haml_tag(:a, text, :href => "/phones/#{phone.id}/verify", :title => text)
+    def link_to_verify(text, phone)
+      capture_haml do
+        haml_tag(:a, text, :href => "/phones/#{phone.id}/verify", :title => 'Verify phone')
       end
     end
   end

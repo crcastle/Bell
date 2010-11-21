@@ -1,5 +1,3 @@
-require root_path("app/helpers/cloudvox_sip.rb")
-
 # represents an endpoint on the system
 # could be either a SIP phone or PSTN phone
 class Phone < Ohm::Model
@@ -15,6 +13,7 @@ class Phone < Ohm::Model
   attribute :cv_domain
   attribute :cv_password
   attribute :verified
+  attribute :verification_code
   
   index :exten
   index :phone_owner
@@ -37,9 +36,10 @@ class Phone < Ohm::Model
         @json_response = @cv.create_sip_account(self.exten, self.phone_owner + "" + self.exten, self.cv_password)
         self.cv_id ||= @json_response["endpoint"]["id"]
         logger.info("Creating SIP phone with cloudvox id " + self.cv_id.to_s)
-      rescue
-        logger.warning("SIP phone creation failed.")
-        logger.warning("json response is " + @json_response.to_s)
+      rescue Exception => e
+        logger.error("SIP phone creation failed.")
+        logger.error("json response is " + @json_response.to_s)
+        logger.error("Exception in Phone.create: " + e.message)
         raise CloudvoxSipError, "SIP phone creation failed for user " + phone_owner, caller
       end
     end
@@ -61,8 +61,9 @@ class Phone < Ohm::Model
       begin
         @json_response = @cv.delete_sip_account(self.cv_id)
         logger.info("Deleting SIP phone with cloudvox id " + self.cv_id.to_s)
-      rescue
-        logger.warning("SIP phone deletion failed for Cloudvox SIP phone ID " + cv_id.to_s)
+      rescue Exception => e
+        logger.error("SIP phone deletion failed for Cloudvox SIP phone ID " + cv_id.to_s)
+        logger.error("Exception in Phone.delete: " + e.message)
         raise CloudvoxSipError, "SIP phone deletion failed for Cloudvox SIP phone ID " + cv_id.to_s, caller
       else
         super
@@ -72,8 +73,9 @@ class Phone < Ohm::Model
     end
   end
   
-  def verify
+  def verify!
     verified = true
+    self.save if self.valid?
   end
   
   def verified?

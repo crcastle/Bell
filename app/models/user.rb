@@ -1,13 +1,12 @@
 # adapted from https://github.com/monkrb/reddit-clone/tree/master/app/models/
 require 'digest/sha1'
-require root_path("app/helpers/cloudvox_sip.rb")
 
 class User < Ohm::Model
   class WrongUsername < ArgumentError; end
   class WrongPassword < ArgumentError; end
   class CloudvoxAppError < StandardError; end
   
-  include Ohm::ExtraValidations
+  #include Ohm::ExtraValidations
   
   attribute :username # TODO: make this require an email
   attribute :password # TODO: make this require a minimum length

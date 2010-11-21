@@ -13,6 +13,7 @@ require "ohm"
 #require "ohm/contrib"  # commented out because not using validations right now
 require "haml"
 require "sass"
+require root_path("app/helpers/cloudvox_sip.rb")
 
 class Main < Monk::Glue
   set :app_file, __FILE__

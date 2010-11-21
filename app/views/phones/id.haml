@@ -1,9 +1,10 @@
 - @title = @name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : "(unverified)")
-- @verified = @phone.verified? ? "" : (@phone.is_sip?) ? "" : link_to_verify("(unverified)")
+- @verified = @phone.verified? ? "" : (@phone.is_sip? ? "" : link_to_verify("(unverified)", @phone))
 
 %h1
-	Edit phone: #{@name} #{@verified}
-
+	Edit phone: #{@name}
+	!= @verified
+	
 - errors_on @phone do |error|
 	- error.on [:name, :not_present], "Please provide a name."
 	- error.on [:exten, :not_present], "Please provide an extension or phone number."
