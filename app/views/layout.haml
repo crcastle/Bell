@@ -25,6 +25,9 @@
 							%a(href="/signup") Sign Up
 						%li
 							%a(href="/login") Login
-			#content		
+			#content
+				- if session[:notice]
+					.notices
+						= session.delete(:notice)
 			
 		!= yield
