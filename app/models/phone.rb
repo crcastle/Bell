@@ -74,8 +74,12 @@ class Phone < Ohm::Model
   end
   
   def verify!
-    verified = true
-    self.save if self.valid?
+    self.verified = true
+    if self.valid?
+      self.save
+    else
+      false
+    end
   end
   
   def verified?

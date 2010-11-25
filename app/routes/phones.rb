@@ -102,6 +102,11 @@ class Main
     
     @phone = Phone[params[:id]]
     
+    if @phone.verified?
+      session[:error] = "Phone has already been verified."
+      redirect "/phones/" + params[:id].to_s
+    end
+    
     if @phone.is_sip?
       session[:notice] = "SIP phones do not need to be verified."
       redirect "/phones/" + params[:id].to_s
@@ -129,6 +134,8 @@ class Main
     elsif @phone.is_mobile?
       if params[:phone][:verification_code] == @phone.verification_code
         @phone.verify!
+        session[:notice] = "Success! Your phone has been verified."
+        redirect "/phones/" + params[:id].to_s
       else
         session[:error] = "Verification code incorrect."
         redirect "/phones/" + params[:id].to_s + "/verify"
@@ -148,7 +155,7 @@ class Main
     # if user trying to edit a phone he doesn't own
     # so just redirect to phones listing
     if @phone.phone_owner != current_user.id
-      session[:error] = "Sorry, you can't verify a a phone you don't own."
+      session[:error] = "Sorry, you can't verify a phone you don't own."
       redirect "/phones"
     end
     
@@ -159,7 +166,7 @@ class Main
       @cv = Cloudvox.new
       # send verification SMS
       # @phone.verification_code gets set to nil if SMS isn't sent
-      @phone.verification_code = cv.send_code_to_mobile(@phone.exten)
+      @phone.verification_code = @cv.send_code_to_mobile(@phone.exten)
       # if @phone is valid, save it to the DB
       @phone.save if @phone.valid?
       # @phone.verification_code is nil which means SMS didn't get sent  
@@ -170,6 +177,7 @@ class Main
       redirect "/phones/" + params[:id].to_s
     end
     
+    session[:notice] = "Verification code sent!"
     redirect "/phones/" + params[:id].to_s + "/verify"
   end
   

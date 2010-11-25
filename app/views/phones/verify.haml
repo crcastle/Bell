@@ -1,6 +1,27 @@
 - @title = "Verify number"
 
+- if session[:notice]
+	= session.delete(:notice)
+
 %h1
 	= "Verify " + format_number(@phone.exten)
 
+- if session[:error]
+	.errors
+		= session.delete(:error)
 
+%p
+	Enter verification code or send one via SMS to your mobile phone.
+	
+%form(action="/phones/#{@phone.id}/verify" method="post")
+	%p
+		%label(for="phone_verification_code") Enter Verification Code
+		%br
+		%input(type="text" name="phone[verification_code]" id="phone_verification_code" value="")
+	
+	%p
+		%input(type="submit" value="Verify!")
+
+%form(action="/phones/#{@phone.id}/verify/send" method="post")
+	%p
+		%input(type="submit" name="Send SMS" id="send_sms" value="Send SMS")

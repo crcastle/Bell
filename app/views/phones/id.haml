@@ -1,6 +1,9 @@
 - @title = @name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : "(unverified)")
 - @verified = @phone.verified? ? "" : (@phone.is_sip? ? "" : link_to_verify("(unverified)", @phone))
 
+- if session[:notice]
+	= session.delete(:notice)
+
 %h1
 	Edit phone: #{@name}
 	!= @verified
