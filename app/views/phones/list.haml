@@ -1,12 +1,13 @@
 - if phones.any?
-	%ul
-		- phones.each do |phone|
-			%li
-				!= link_to_phone phone
-				!= phone.type
-				!= phone.exten
-				!= phone.cv_username if phone.cv_username
-				!= phone.cv_password if phone.cv_username
+	.list
+		%ul
+			- phones.each do |phone|
+				%li
+					!= link_to_phone phone
+					!= phone.type
+					!= phone.exten
+					!= phone.cv_username if phone.cv_username
+					!= phone.cv_password if phone.cv_username
 - else
 	%p
 		= message

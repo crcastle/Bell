@@ -1,10 +1,11 @@
 - if numbers.any?
-	%ul
-		- numbers.each do |number|
-			%li
-				!= link_to_number number
-				!= number.state
-				!= show_availability number
+	.list
+		%ul
+			- numbers.each do |number|
+				%li
+					!= link_to_number number
+					!= number.state
+					!= show_availability number
 - else
 	%p
 		= message
