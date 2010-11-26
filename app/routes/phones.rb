@@ -102,49 +102,41 @@ class Main
     
     @phone = Phone[params[:id]]
     
+    # check if phone is already verified
     if @phone.verified?
       session[:error] = "Phone has already been verified."
       redirect "/phones/" + params[:id].to_s
     end
     
-    if @phone.is_sip?
-      session[:notice] = "SIP phones do not need to be verified."
-      redirect "/phones/" + params[:id].to_s
-    elsif @phone.is_mobile?      
-      # display page with generate code button, text input for code, and submit button for text input
-      haml :"phones/verify"
-    elsif @phone.is_land?
-      # ask user to enter 4-digit verification code
-      # explain that user's phone will ring and say a 4-digit number
-      # ask the user to click the button (post) to make the call with the verification code
-      # clicking the button clears any past verification code and creates a new one
-    else
+    # check if phone is verifyable
+    if ! @phone.verifyable?
+      session[:notice] = "This phone does not need to be verified."
       redirect "/phones/" + params[:id].to_s
     end
+    
+    haml :"phones/verify"
   end
   
   post "/phones/:id/verify" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
+    @supplied_code = @params[:phone][:verification_code]
     
-    if @phone.is_sip?
-      session[:notice] = "SIP phones do not need to be verified."
-      redirect "/phones/" + params[:id].to_s
-    elsif @phone.is_mobile?
-      if params[:phone][:verification_code] == @phone.verification_code
-        @phone.verify!
-        session[:notice] = "Success! Your phone has been verified."
-        redirect "/phones/" + params[:id].to_s
-      else
-        session[:error] = "Verification code incorrect."
-        redirect "/phones/" + params[:id].to_s + "/verify"
-      end
-    elsif @phone.is_land?
-      # verify a landline phone with a call
-    else
+    if ! @phone.verifyable?
+      session[:notice] = "This phone does not need to be verified."
       redirect "/phones/" + params[:id].to_s
     end
+    
+    if @phone.verify_with_code(@supplied_code)
+      session[:notice] = "Success!  Your phone has been verified."
+      redirect "/phones/" + params[:id].to_s
+    else
+      session[:error] = "Verification code incorrect."
+      redirect "/phones/" + params[:id].to_s + "/verify"
+    end
+
+    redirect "/phones/" + params[:id].to_s
   end
   
   post "/phones/:id/verify/send" do
@@ -159,25 +151,17 @@ class Main
       redirect "/phones"
     end
     
-    if @phone.is_sip?
-      session[:notice] = "SIP phones do not need to be verified."
-      redirect "/phones/" + params[:id].to_s
-    elsif @phone.is_mobile?
-      @cv = Cloudvox.new
-      # send verification SMS
-      # @phone.verification_code gets set to nil if SMS isn't sent
-      @phone.verification_code = @cv.send_code_to_mobile(@phone.exten)
-      # if @phone is valid, save it to the DB
-      @phone.save if @phone.valid?
-      # @phone.verification_code is nil which means SMS didn't get sent  
-      session[:error] = "Uh oh, something broke and the SMS message didn't get sent properly." unless @phone.verification_code
-    elsif @phone.is_land?
-      # verify a landline phone with a call
-    else
+    if ! @phone.verifyable?
+      session[:notice] = "This phone does not need to be verified."
       redirect "/phones/" + params[:id].to_s
     end
     
-    session[:notice] = "Verification code sent!"
+    if @phone.send_verification_code
+      session[:notice] = "Verification code sent!"
+    else
+      session[:error] = "Uh oh, something broke and the SMS message didn't get sent properly."
+    end
+    
     redirect "/phones/" + params[:id].to_s + "/verify"
   end
   
