@@ -1,0 +1,209 @@
+!width = 960px
+!left_width = !width * (1/4)
+!right_width = !width * (3/4) - 30
+
+=alternating-rows-and-columns(!even_row_color, !odd_row_color, !header_color = white, !footer_color = white)
+  th
+    :background-color= !header_color
+    &.even, &:nth-child(2n)
+      :background-color= !header_color
+  tr.odd
+    td
+      :background-color= !odd_row_color
+      &.even, &:nth-child(2n)
+        :background-color= !odd_row_color
+  tr.even
+    td
+      :background-color= !even_row_color
+      &.even, &:nth-child(2n)
+        :background-color= !even_row_color
+  tfoot
+    th, td
+      :background-color !footer_color
+      &.even, &:nth-child(2n)
+        :background-color= !footer_color
+section, header, footer, aside, nav, article
+  display: block
+
+body
+  :background-color whitesmoke
+  :font-family "Lucida Grande", sans-serif
+  :font-size 0.8em
+  :color #333
+
+=clearfix
+  *display:     inline-block
+  &:after
+    content:    " "
+    display:    block
+    height:     0
+    clear:      both
+    visibility: hidden
+
+.clear
+  :clear both
+  :width 100%
+  :font-size 0px
+
+= title
+  :font-family "Helvetica", sans-serif
+  :font-size 18px
+  :font-weight bold
+
+= hover
+  :text-decoration none
+
+  &:hover
+    :text-decoration underline
+
+h1
+  :font-size 2em
+  :line-height 2.4em
+
+h2
+  :font-size 1.4em
+  :line-height 2em
+
+a
+  +hover
+  :color #069
+
+#ex_header, #ex_navbar, #ex_middle, #ex_footer
+  :margin 0 auto
+  :width = !width
+  :clear both
+  :background-color #ddd
+
+#ex_header
+  :padding 15px 0 25px 0
+
+#ex_header h1, #ex_footer h6
+  margin: 0 0 0 10px
+
+#ex_navbar ul
+  margin: 0
+  padding: 0
+  list-style: none
+  width: 100%
+  display: block
+  background-color: #000
+  float: left
+  li
+    float: right
+    margin: 0 10px 0 0
+    padding: 3px 10px
+    color: #999
+    a
+      text-decoration: none
+      color: #fff
+      &:hover
+        color: #ffc
+
+#ex_middle
+  background-color: #ccc
+
+#ex_sidebar
+  :float left
+  :width = !left_width
+  :background-color #ccc
+  :padding-left 10px
+  :padding-top 10px
+  h2
+    :margin 0 0 0 10px
+
+  li
+    :padding-top 5px
+
+#ex_main
+  :float left
+  :width = !right_width
+  :padding-left 20px
+  :padding-bottom 20px
+  :background-color #eee
+  table
+    +alternating-rows-and-columns(#eee, #ccc, #eee)
+    thead
+      :border-bottom 1px solid #ccc
+    th
+      :text-align left
+      :padding 3px 5px
+    td
+      :padding 3px 5px
+
+form
+  > p
+    label
+      +title
+
+    input, button
+      :font-size 2em
+      :margin 5px 0 0 0
+
+  p
+    :margin 10px 0
+
+  fieldset
+    :border-width 0
+    :padding 0
+    :margin 20px 0
+
+    legend
+      +title
+
+    p
+      :margin-left 5px
+      :margin-top 11px
+
+    input[type="text"]
+      :margin 5px 0 0 0
+
+  span.example
+    :color #777
+
+  #post_date
+    :width 190px
+
+  button.up
+    :background url(/images/up.gif)
+    :border 0
+    :height 15px
+    :width 14px
+
+  button.up-selected
+    :background url(/images/up-selected.gif)
+    :border 0
+    :height 15px
+    :width 14px
+
+#ex_footer
+  :margin 0 auto
+  :border-top 1px solid #ddd
+  :width = !width
+  :padding 9px 0 0 0
+  :font-size 11px
+  :color #666
+  :clear both
+  :background-color #ddd
+
+  p
+    :padding-top 4px
+    :float left
+    :line-height 16px
+
+    &.sponsor
+      :padding-top 0
+      :float right
+
+  img
+    :vertical-align middle
+
+  a
+    :color #333
+
+.notices
+  :margin 10px 0 20px 0
+  :color blue
+
+.errors
+  :margin 10px 0 20px 0
+  :color crimson

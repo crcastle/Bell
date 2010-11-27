@@ -1,15 +1,17 @@
-!!! Strict
-%html
+!!!
+%html{:lang => "en"}
 	%head
 		%title= [@title, "Bell - A CRC Application"].compact.join(" - ")
-		%meta{:"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}/
-		%link{:rel => "stylesheet", :href => "/css/reset.css", :type => "text/css"}/
-		%link{:rel => "stylesheet", :href => "/css/main.css", :type => "text/css"}/
+		%meta{:"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+		%link{:rel => "stylesheet", :href => "/css/reset.css", :type => "text/css"}
+		-#%link{:rel => "stylesheet", :href => "/css/main.css", :type => "text/css"}
+		%link{:rel => "stylesheet", :href => "/css/stylesheet.css", :type => "text/css"}
 
 	%body(class="#{logged_in? ? "logged_in" : nil}")
-		#header
-			#navigation
-		
+		#example
+			%header#ex_header
+				%h1 Bell Phone App
+			%nav#ex_navbar		
 				%ul
 					- if logged_in?
 						%li
@@ -25,9 +27,20 @@
 							%a(href="/signup") Sign Up
 						%li
 							%a(href="/login") Login
-			#content
-				- if session[:notice]
-					.notices
-						= session.delete(:notice)
-			
-		!= yield
+			%section#ex_middle
+				%aside#ex_sidebar
+					%ul
+						%li
+							%a(href="/phones") Phones
+						%li
+							%a(href="/numbers") Numbers
+						%li
+							%a(href="/voicemails") Voicemails
+				%article#ex_main
+					- if session[:notice]
+						.notices
+							= session.delete(:notice)
+					!= yield
+					.clear
+				%footer#ex_footer
+					This is the bell phone app.

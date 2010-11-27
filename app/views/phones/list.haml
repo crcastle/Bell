@@ -1,13 +1,27 @@
 - if phones.any?
-	.list
-		%ul
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th Name
+				%th Type
+				%th Number
+				%th SIP Username
+				%th SIP Password
+		%tbody
+			- @row_count = 0
 			- phones.each do |phone|
-				%li
-					!= link_to_phone phone
-					!= phone.type
-					!= phone.exten
-					!= phone.cv_username if phone.cv_username
-					!= phone.cv_password if phone.cv_username
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count = @row_count + 1
+					%td
+						!= link_to_phone phone
+					%td
+						!= phone.type
+					%td
+						!= phone.exten
+					%td
+						!= phone.cv_username if phone.cv_username
+					%td
+						!= phone.cv_password if phone.cv_password
 - else
 	%p
 		= message

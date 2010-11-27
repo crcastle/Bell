@@ -1,11 +1,21 @@
 - if numbers.any?
-	.list
-		%ul
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th Number
+				%th State
+				%th Availability
+		%tbody
+			- @row_count = 0
 			- numbers.each do |number|
-				%li
-					!= link_to_number number
-					!= number.state
-					!= show_availability number
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count = @row_count + 1
+					%td
+						!= link_to_number number
+					%td
+						!= number.state
+					%td
+						!= show_availability number
 - else
 	%p
 		= message

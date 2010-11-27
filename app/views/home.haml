@@ -1,7 +1,5 @@
 - if logged_in?
-	Hi #{current_user}!
-	%br
-	%br
+	%h1 Hi #{current_user}!
 	%ul
 		%li
 			Check out your  
@@ -18,7 +16,3 @@
 		%li
 			Listen to your 
 			%a(href="/voicemails") voicemail
-
-#footer
-	%p
-		This is the Bell phone app.
