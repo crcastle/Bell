@@ -18,7 +18,9 @@ require root_path("app/helpers/cloudvox_sip.rb")
 class Main < Monk::Glue
   set :app_file, __FILE__
   use Rack::Session::Cookie
+  logger.info "--------------------------"
   logger.info "Starting app"
+  logger.info "--------------------------"
 end
 
 # Connect to redis database.
