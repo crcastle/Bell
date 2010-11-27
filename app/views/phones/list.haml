@@ -5,8 +5,7 @@
 				%th Name
 				%th Type
 				%th Number
-				%th SIP Username
-				%th SIP Password
+				%th Verified?
 		%tbody
 			- @row_count = 0
 			- phones.each do |phone|
@@ -19,9 +18,7 @@
 					%td
 						!= phone.exten
 					%td
-						!= phone.cv_username if phone.cv_username
-					%td
-						!= phone.cv_password if phone.cv_password
+						!= phone.verified? ? "Yes" : phone.verifyable? ? link_to_verify("No", phone) : "Not needed"
 - else
 	%p
 		= message
