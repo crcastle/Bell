@@ -11,6 +11,11 @@ class Main
         number.insert(1, '(')
         number.insert(1, ' ')
         number.insert(0, '+')
+      elsif number.length == 10
+        number.insert(-5, '-')
+        number.insert(3, ' ')
+        number.insert(3, ')')
+        number.insert(0, '(')
       else
         number
       end

@@ -1,0 +1,29 @@
+- if logged_in?
+	%h1 #{current_user}'s Call History
+	
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th Date
+				%th Direction
+				%th Duration
+				%th Source
+				%th Destination
+		%tbody
+			- @row_count = 0
+			- @page_results.each do |result|
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count = @row_count + 1
+					%td
+						!= result["calldate"]
+					%td
+						!= result["direction"]
+					%td
+						!= result["billsec"]
+					%td
+						!= format_number(result["src"])
+					%td
+						!= format_number(result["dst"])
+	%br
+	%br
+	!= will_paginate @page_results

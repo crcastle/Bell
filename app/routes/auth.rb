@@ -1,5 +1,7 @@
 # adapted from https://github.com/monkrb/reddit-clone/tree/master/app/routes/
 class Main
+  #helpers Pagination::Helpers
+  
   get "/login" do
     haml :"login"
   end

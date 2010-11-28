@@ -1,5 +1,6 @@
 # adapted from https://github.com/monkrb/reddit-clone/tree/master/app/models/
 require 'digest/sha1'
+require 'app/helpers/cloudvox_sip'
 
 class User < Ohm::Model
   class WrongUsername < ArgumentError; end
@@ -65,6 +66,11 @@ class User < Ohm::Model
   
   def to_param
     username
+  end
+  
+  def get_call_history
+    @cv = Cloudvox.new
+    @cv.get_call_history("805")
   end
   
 private

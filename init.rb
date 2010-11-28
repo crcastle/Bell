@@ -14,6 +14,26 @@ require "ohm"
 require "haml"
 require "sass"
 require root_path("app/helpers/cloudvox_sip.rb")
+require "will_paginate"
+require "will_paginate/view_helpers/base"
+require "will_paginate/view_helpers/link_renderer"
+
+WillPaginate::ViewHelpers::LinkRenderer.class_eval do
+  protected
+  def url(page)
+    url = @template.request.url
+    if page == 1
+      # strip out page param and trailing ? if it exists
+      url.gsub(/\/[0-9]+/, '').gsub(/\/$/, '')
+    else
+      if url =~ /\/[0-9]+/
+        url.gsub(/\/[0-9]+/, "\/#{page}")
+      else
+        url + "#{page}"
+      end      
+    end
+  end
+end
 
 class Main < Monk::Glue
   set :app_file, __FILE__

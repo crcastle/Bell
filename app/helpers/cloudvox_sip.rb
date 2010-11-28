@@ -68,4 +68,9 @@ class Cloudvox
       return @random_4
     end
   end
+  
+  # returns a ruby object with call history
+  def get_call_history(app_id)
+    JSON.parse((@cloudvox_api["/applications/" + app_id + "/call_detail_records.json"].get).body)
+  end
 end
