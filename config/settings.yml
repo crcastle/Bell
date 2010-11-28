@@ -17,3 +17,5 @@ defaults: &defaults
 
 :production:
   <<: *defaults
+  :redis:
+    :url: redis://heroku:8b3d3faf9ecdc51696a2749160614c29@filefish.redistogo.com:9167/
