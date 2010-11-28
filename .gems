@@ -2,4 +2,4 @@ sinatra
 monk-glue
 ohm
 haml
-will_paginate
+agnostic-will_paginate
