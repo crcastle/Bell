@@ -3,3 +3,6 @@ monk-glue
 ohm
 haml
 agnostic-will_paginate
+rest_client
+json
+yaml
