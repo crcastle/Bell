@@ -7,14 +7,12 @@ class Main
   end
   
   get '/history/:page' do
-    # display call history for this user
-    # paginate
-    # fileter by date
-    # filter by incoming, outgoing
-    # filter by phone
-    # filter by number
-    # filter by type
-    # download
+    # TODO: fileter by date
+    # TODO: filter by incoming, outgoing
+    # TODO: filter by phone
+    # TODO: filter by number
+    # TODO: filter by type
+    # TODO: download
     
     require_login
     

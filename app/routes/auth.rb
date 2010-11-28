@@ -12,8 +12,6 @@ class Main
       redirect_to_stored
     rescue Exception => e
       logger.error("Exception in /login: " + e.message)
-      logger.error("Exception backtrace:")
-      logger.error(e.backtrace)
       session[:error] = "We are sorry: the information supplied is not valid."
       haml :"login"
     end

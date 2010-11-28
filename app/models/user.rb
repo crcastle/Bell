@@ -69,6 +69,7 @@ class User < Ohm::Model
   end
   
   def get_call_history
+    # TODO: update the parameter in get_call_history to be dynamic
     @cv = Cloudvox.new
     @cv.get_call_history("805")
   end

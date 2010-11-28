@@ -46,7 +46,19 @@ class Cloudvox
   
   def send_code_to_landline(number)
     # generate random 4 digit number
+    @random_4 = rand(9999).to_s
+    logger.info("random digits generated for land: " + @random_4)
+    
     # call a landline number
+    # TODO: update the "805" in the URL to be dynamic
+    begin
+      @cloudvox_api["/api/v1/http/applications/805/dial"].post :destination => number
+    rescue Exception => e
+      logger.error("Exception from 'send_code_to_land': " + e.message)
+      return nil
+    else
+      return @random_4
+    end
     # prompt the user to press 1 to hear code
     # speak 4 digits
     # prompt user to press 1 to hear code again
@@ -56,9 +68,10 @@ class Cloudvox
   def send_code_to_mobile(number)
     # generate random 4 digit number
     @random_4 = rand(9999).to_s
-    logger.info("random digits generated: " + @random_4)
+    logger.info("random digits generated for mobile: " + @random_4)
     
     # send a SMS with only 4 digits to number
+    # TODO: update the "805" in the URL to be dynamic
     begin
       @cloudvox_api["/api/v1/applications/805/sms"].post :to => number, :from => "14252243400", :message => @random_4
     rescue Exception => e

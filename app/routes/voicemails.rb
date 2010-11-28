@@ -2,6 +2,7 @@ class Main
   # list voicemails
   get "/voicemails" do
     # list all voicemails in DB for current_user
+    haml :"/voicemails"
   end
   
   # create voicemail
