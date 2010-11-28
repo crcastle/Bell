@@ -13,4 +13,4 @@ sinatra 1.0 git://github.com/sinatra/sinatra.git
 spawn 0.1.3 git://github.com/soveran/spawn.git
 stories 0.1.3 (test) git://github.com/citrusbyte/stories.git
 webrat 0.7.0 (test) git://github.com/brynary/webrat.git
-will_paginate 2.3.15 git://github.com/mislav/will_paginate.git
+agnostic-will_paginate git://github.com/mislav/will_paginate.git
