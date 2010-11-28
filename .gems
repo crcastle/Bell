@@ -5,4 +5,3 @@ haml
 agnostic-will_paginate
 rest-client
 json
-yaml
