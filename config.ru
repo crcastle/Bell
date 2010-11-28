@@ -1,6 +1,6 @@
 require "init"
 
 Main.set :run, false
-Main.set :environment, :test
+Main.set :environment, :production
 
 run Main
