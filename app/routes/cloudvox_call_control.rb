@@ -18,7 +18,7 @@ class Main
     @phrase = "Please press the 1 key to hear your phone's verification code."
     @max_digits = "1"
     @timeout = "2"
-    @callback_url = "http://50.12.2.82:4567/cv/verify_land"
+    @callback_url = "http://bell.heroku.com/cv/verify_land"
     @json_output = [{:name => "Speak", :phrase => @phrase},{:name => "GetDigits", :max => @max_digits, :timeout => @timeout, :url => @callback_url}].to_json
   end
   
