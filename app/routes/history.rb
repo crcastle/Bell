@@ -1,12 +1,12 @@
 class Main
   helpers WillPaginate::ViewHelpers::Base
   
-  get '/history' do
+  get '/history/?' do
     require_login
     redirect '/history/1'
   end
   
-  get '/history/:page' do
+  get '/history/:page/?' do
     # TODO: fileter by date
     # TODO: filter by incoming, outgoing
     # TODO: filter by phone

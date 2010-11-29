@@ -1,6 +1,6 @@
 class Main
   # show the numbers for a user
-  get "/numbers" do
+  get "/numbers/?" do
     require_login
     
     @owner = User[session[:user]]
@@ -10,7 +10,7 @@ class Main
   end
   
   # add a new number to an account
-  post "/numbers" do
+  post "/numbers/?" do
     accept_login_or_signup
     
     @number = Number.find(:did => params[:number][:did]).first
@@ -25,7 +25,7 @@ class Main
     end
   end
   
-  get "/numbers/add" do
+  get "/numbers/add/?" do
     require_login
     redirect "/" unless current_user.id == "1"
     
@@ -34,7 +34,7 @@ class Main
     haml :"numbers/add"
   end
   
-  post "/numbers/add" do
+  post "/numbers/add/?" do
     accept_login_or_signup  
     redirect "/" unless current_user.id == "1"
     
@@ -48,7 +48,7 @@ class Main
     end
   end
 
-  get "/numbers/new" do
+  get "/numbers/new/?" do
     require_login
     
     @number = Number.new
@@ -57,7 +57,7 @@ class Main
   end
   
   # show the details for a phone
-  get "/numbers/:id" do
+  get "/numbers/:id/?" do
     require_login
     
     @number = Number[params[:id]]
@@ -77,7 +77,7 @@ class Main
     haml :"numbers/id"
   end
   
-  post "/numbers/:id" do
+  post "/numbers/:id/?" do
     accept_login_or_signup
     
     @number = Number[params[:id]]

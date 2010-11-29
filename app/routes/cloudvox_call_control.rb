@@ -1,5 +1,5 @@
 class Main
-  get "/cv/verify_land" do
+  get "/cv/verify_land/?" do
     content_type :json
     
     @random_4 = params[:random_4]
@@ -22,7 +22,7 @@ class Main
     @json_output = [{:name => "Speak", :phrase => @phrase},{:name => "GetDigits", :max => @max_digits, :timeout => @timeout, :url => @callback_url}].to_json
   end
   
-  post "/cv/verify_land" do
+  post "/cv/verify_land/?" do
     @random_4 = request.cookies["code"]
     
     if params[:result] == "1"

@@ -1,6 +1,6 @@
 class Main
   # show the phones for a user
-  get "/phones" do
+  get "/phones/?" do
     require_login
     
     @owner = User[session[:user]]
@@ -11,7 +11,7 @@ class Main
   end
   
   # add a new phone to an account
-  post "/phones" do
+  post "/phones/?" do
     accept_login_or_signup
     
     @phone = Phone.new(params[:phone])
@@ -26,7 +26,7 @@ class Main
     end
   end
   
-  get "/phones/new" do
+  get "/phones/new/?" do
     require_login
     
     @phone = Phone.new
@@ -34,7 +34,7 @@ class Main
   end
   
   # show the details for a phone
-  get "/phones/:id" do
+  get "/phones/:id/?" do
     require_login
     
     @phone = Phone[params[:id]]
@@ -55,7 +55,7 @@ class Main
   end
   
   # update a phone
-  post "/phones/:id" do
+  post "/phones/:id/?" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
@@ -80,7 +80,7 @@ class Main
     end
   end
   
-  delete "/phones/:id" do
+  delete "/phones/:id/?" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
@@ -97,7 +97,7 @@ class Main
     redirect "/phones"
   end
   
-  get "/phones/:id/verify" do
+  get "/phones/:id/verify/?" do
     require_login
     
     @phone = Phone[params[:id]]
@@ -117,7 +117,7 @@ class Main
     haml :"phones/verify"
   end
   
-  post "/phones/:id/verify" do
+  post "/phones/:id/verify/?" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
@@ -139,7 +139,7 @@ class Main
     redirect "/phones/" + params[:id].to_s
   end
   
-  post "/phones/:id/verify/send" do
+  post "/phones/:id/verify/send/?" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]

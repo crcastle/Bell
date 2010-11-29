@@ -2,11 +2,11 @@
 class Main
   #helpers Pagination::Helpers
   
-  get "/login" do
+  get "/login/?" do
     haml :"login"
   end
   
-  post "/login" do
+  post "/login/?" do
     begin
       authenticate(params)
       redirect_to_stored
@@ -17,18 +17,18 @@ class Main
     end
   end
   
-  get "/logout" do
+  get "/logout/?" do
     session[:user] = nil
     redirect "/"
   end
   
-  get "/signup" do
+  get "/signup/?" do
     @user = User.new
     
     haml :"signup"
   end
   
-  post "/signup" do
+  post "/signup/?" do
     @user = signup(params[:user])
     
     begin
