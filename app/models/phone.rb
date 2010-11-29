@@ -100,12 +100,10 @@ class Phone < Ohm::Model
     return nil unless self.verifyable?
     @cv = Cloudvox.new
     
-    if self.is_mobile?
-      self.verification_code = @cv.send_code_to_mobile(self.exten)
-    elsif self.is_land?
-      self.verification_code = @cv.send_code_to_land(self.exten)
-    else
-      return nil
+    self.verification_code = case self.type
+      when "mobile" then @cv.send_code_to_mobile(self.exten)
+      when "land" then @cv.send_code_to_land(self.exten)
+      when "sip" then nil
     end
     
     self.save if self.valid?

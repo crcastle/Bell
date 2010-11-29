@@ -1,5 +1,5 @@
 - @title = "Verify number"
-
+- @verify_button_text = @phone.is_mobile? ? "Send SMS" : @phone.is_land? ? "Call my phone" : nil
 
 %h1
 	= "Verify " + format_number(@phone.exten)
@@ -9,8 +9,15 @@
 		= session.delete(:error)
 
 %p
-	Enter verification code or send one via SMS to your mobile phone.
-	
+	Enter verification code or click the button below to receive a verification code via phone call or SMS.
+
+%form(action="/phones/#{@phone.id}/verify/send" method="post")
+	%p
+		%input(type="submit" name="#{@verify_button_text}" id="send_sms" value="#{@verify_button_text}")
+
+%br
+%br
+
 %form(action="/phones/#{@phone.id}/verify" method="post")
 	%p
 		%label(for="phone_verification_code") Enter Verification Code
@@ -19,7 +26,3 @@
 	
 	%p
 		%input(type="submit" value="Verify!")
-
-%form(action="/phones/#{@phone.id}/verify/send" method="post")
-	%p
-		%input(type="submit" name="Send SMS" id="send_sms" value="Send SMS")

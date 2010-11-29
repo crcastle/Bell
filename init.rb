@@ -38,15 +38,13 @@ end
 class Main < Monk::Glue
   set :app_file, __FILE__
   use Rack::Session::Cookie
-  Ohm.connect(:url => "redis://heroku:8b3d3faf9ecdc51696a2749160614c29@filefish.redistogo.com:9167/")
+  #Ohm.connect(:url => "redis://heroku:8b3d3faf9ecdc51696a2749160614c29@filefish.redistogo.com:9167/")
   logger.info "--------------------------"
   logger.info "Starting app"
   logger.info "--------------------------"
 end
 
-
 # Connect to redis database.
-logger.debug(":redis is: " + monk_settings(:redis).to_s)
 Ohm.connect(monk_settings(:redis))
 
 # Load all application files.
