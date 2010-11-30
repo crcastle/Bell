@@ -1,0 +1,24 @@
+- if @users.any?
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th ID
+				%th Username
+				%th Phones
+				%th Numbers
+				%th Voicemails
+		%tbody
+			- @row_count = 0
+			- @users.each do |user|
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count += 1
+					%td
+						!= user.id
+					%td
+						!= user.username
+					%td
+						!= user.phones.size
+					%td
+						!= user.numbers.size
+					%td
+						!= user.voicemails.size

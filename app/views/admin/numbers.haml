@@ -1,0 +1,24 @@
+- if @numbers.any?
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th ID
+				%th Number
+				%th State
+				%th Available
+				%th Owner
+		%tbody
+			- @row_count = 0
+			- @numbers.each do |number|
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count += 1
+					%td
+						!= number.id
+					%td
+						!= format_number number
+					%td
+						!= number.state
+					%td
+						!= number.available? ? "yes" : "no"
+					%td
+						!= number.username

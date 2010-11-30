@@ -1,0 +1,41 @@
+- @title = format_number(@did)
+
+%h1 Number details
+
+%form(action="/admin/numbers/#{@id}" method="post")
+	%input(type="hidden" name="_method" value="put")
+	%p
+		%label(for="number_did") Number
+		%span.example Enter a number
+		%br
+		%input(name="number[did]" id="number_did" value="#{@number.did}")
+		
+	%p
+		%label(for="number_state") State
+		%span.example e.g. WA, CT, CA, etc.
+		%br
+		%input(name="number[state]" id="number_state" value="#{@number.state}")
+		
+	%p
+		%label(for="number_area_code") Area Code
+		%span.example e.g. 206, 860, 415, etc.
+		%br
+		%input(name="number[area_code]" id="number_area_code" value="#{@number.area_code}")
+	
+	%p
+		%label(for="number_did_owner") Owner ID
+		%span.example 1, 2, 3, ...
+		%br
+		%input(name="number[did_owner]" id="number_did_owner" value="#{@number.did_owner}")
+	%p
+		%button(type="submit")
+			Submit
+	
+%form(action="/admin/numbers/#{@id}" method="post")
+	%p
+		%input(type="hidden" name="_method" value="delete")
+		%button(type="submit" onclick="return confirm('Are you sure you want to delete this number?')")
+			Delete Number
+		%button(type="button" onclick="javascript:document.location = '/admin/numbers'")
+			Cancel
+

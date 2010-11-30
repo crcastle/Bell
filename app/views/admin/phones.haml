@@ -1,0 +1,27 @@
+- if @phones.any?
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th ID
+				%th Name
+				%th Type
+				%th Number
+				%th Verified?
+				%th Owner
+		%tbody
+			- @row_count = 0
+			- @phones.each do |phone|
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count += 1
+					%td
+						!= phone.id
+					%td
+						!= link_to_phone phone
+					%td
+						!= phone.type
+					%td
+						!= phone.exten
+					%td
+						!= phone.verified? ? "Yes" : phone.verifyable? ? link_to_verify("No", phone) : "Not needed"
+					%td
+						!= phone.username

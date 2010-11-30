@@ -84,6 +84,10 @@ class Main
       @current_user ||= User[session[:user]] if session[:user]
     end
     
+    def require_admin
+      halt 404 unless logged_in? && current_user.admin?
+    end
+    
     def redirect_to_stored
       if return_to = session[:return_to]
         session[:return_to] = nil
