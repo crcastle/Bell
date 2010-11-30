@@ -30,7 +30,7 @@ class Main
       @json_output = [{:name => "Speak", :phrase => @phrase},hangup].to_json
     else # if the user didn't press 1, set cookie to start and redirect to url
       response.set_cookie("status","start")
-      redirect "/cv/verify_land"
+      redirect request.fullpath
     end
   end
   
