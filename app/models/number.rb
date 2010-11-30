@@ -29,4 +29,8 @@ class Number < Ohm::Model
   def available?
     did_owner.nil? ? true : (did_owner == "" ? true : false)
   end
+  
+  def username
+    User.username_for(self.did_owner)
+  end
 end

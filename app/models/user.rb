@@ -12,6 +12,7 @@ class User < Ohm::Model
   attribute :username # TODO: make this require an email
   attribute :password # TODO: make this require a minimum length
   attribute :salt
+  attribute :admin # TODO: assert this to be "true" or "false"
   
   set :voicemails, Voicemail
   set :phones, Phone
@@ -46,7 +47,7 @@ class User < Ohm::Model
   #end
   
   # returns an array of Voicemails for this user
-  def voicemails_received
+  def voicemails
     Voicemail.find(:for_user => id)
   end
   
@@ -74,6 +75,22 @@ class User < Ohm::Model
     @cv.get_call_history("805")
   end
   
+  def admin?
+    (self.admin == "true" || userid_1?) ? true : false
+  end
+      
+  def make_admin!
+    self.admin = "true"
+  end
+  
+  def self.username_for(id)
+    if id
+      User[id].username
+    else
+      nil
+    end
+  end
+  
 private
 
   def self.encrypt(string, salt)
@@ -82,5 +99,9 @@ private
   
   def encrypt(*attrs)
     self.class.encrypt(*attrs)
+  end
+  
+  def userid_1?
+    self.id == "1" ? true : false
   end
 end

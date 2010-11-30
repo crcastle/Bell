@@ -125,4 +125,8 @@ class Phone < Ohm::Model
     self.name.to_s
   end
   
+  def username
+    User.username_for(self.phone_owner)
+  end
+  
 end
