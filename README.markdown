@@ -8,6 +8,7 @@ _Note that this is an unfinished experimental phone management app. Use at your 
 *xx Assign SIP extension number programatically  
 *xx Don't allow SIP extension number to be changed by user  
 *xx Don't allow land or mobile number to be changed after verification  
+* Expose SIP cloudvox username and password on id.haml page  
 * Improve UI for number provisioning page  
 * Incorporate Cloudvox number list on number provisioning page  
 * Provision Cloudvox number using provisioning page  
@@ -27,4 +28,5 @@ _Note that this is an unfinished experimental phone management app. Use at your 
 * Change username to email address  
 * Verify email address before allowing adding of phones or numbers  
 * Add forgot password functionality  
+* vendor all gems  
 * Add billing...  
