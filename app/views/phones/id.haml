@@ -1,5 +1,6 @@
 - @title = @name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : "(unverified)")
-- @verified = @phone.verified? ? "" : (@phone.is_sip? ? "" : link_to_verify("(unverified)", @phone))
+- @verified = @phone.verified? ? "(verified)" : (@phone.is_sip? ? "" : link_to_verify("(unverified)", @phone))
+- @disabled = (@phone.verified? || @phone.is_sip?) ? "disabled" : nil
 
 %h1
 	Edit phone: #{@name}
@@ -7,10 +8,20 @@
 	
 - errors_on @phone do |error|
 	- error.on [:name, :not_present], "Please provide a name."
-	- error.on [:exten, :not_present], "Please provide an extension or phone number."
+	- error.on [:exten, :not_present], "Please provide a phone number."
 	- error.on [:type, :not_present], "Please select a phone type."	
 
 %form(action="/phones/#{@phone.id}" method="post")
+	%p
+		%label(for="phone_type") Type
+		%span.example e.g. Mobile, landline, or SIP? (question mark link to explain these types)
+		%br
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_mobile", :value => "mobile", :checked => @phone.is_mobile? ? true : nil, :disabled => @disabled} Mobile
+		%br
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_land", :value => "land", :checked => @phone.is_land? ? true : nil, :disabled => @disabled} Landline
+		%br
+		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_sip", :value => "sip", :checked => @phone.is_sip? ? true : nil, :disabled => @disabled} SIP
+
 	%p
 		%label(for="phone_name") Name
 		%span.example e.g. "Chris's mobile phone"
@@ -21,17 +32,7 @@
 		%label(for="phone_exten") Extension or Phone Number
 		%span.example e.g. 16178235295 or 85
 		%br
-		%input(name="phone[exten]" id="phone_exten" value="#{@phone.exten}")
-	
-	%p
-		%label(for="phone_type") Type
-		%span.example e.g. Mobile, landline, or SIP? (question mark link to explain these types)
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_mobile", :value => "mobile", :checked => @phone.is_mobile? ? true : nil} Mobile
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_land", :value => "land", :checked => @phone.is_land? ? true : nil} Landline
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_sip", :value => "sip", :checked => @phone.is_sip? ? true : nil} SIP
+		%input{:name => "phone[exten]", :id => "phone_exten", :value => "#{@phone.exten}", :disabled => @disabled}
 	
 	%p
 		%button(type="submit")

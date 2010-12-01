@@ -38,7 +38,7 @@ class Cloudvox
   
   # create a Cloudvox app
   def create_app(name, url)
-    JSON.parse((@cloudvox_api["/application/create.json"].post :call_flow => {:name => name}, :agi => {:url => url}).body)
+    JSON.parse((@cloudvox_api["/applications/create.json"].post :call_flow => {:name => name}, :agi => {:url => url}).body)
   end
   
   # Call number and connect to Cloudvox app 805

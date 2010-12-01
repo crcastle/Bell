@@ -1,6 +1,7 @@
 # represents an endpoint on the system
 # could be either a SIP phone or PSTN phone
 class Phone < Ohm::Model
+  include Ohm::Callbacks
   class CloudvoxSipError < StandardError; end
   
   attribute :type # "sip" or "regular"
@@ -17,14 +18,20 @@ class Phone < Ohm::Model
   
   index :exten
   index :phone_owner
+  index :type
+  
+  before :validate, :assign_sip_exten
   
   def validate
+    super
+    
     assert_present :type
-    assert_present :exten
+    assert_present :exten if (self.is_mobile? || self.is_land?)
+    assert_unique :exten if :type == "sip"
     assert_present :name
     assert_numeric :phone_owner
   end
-  
+    
   def create
     if self.is_sip?
       @cv = Cloudvox.new
@@ -33,7 +40,7 @@ class Phone < Ohm::Model
       self.cv_password = (0...8).map{ ('a'..'z').to_a[rand(26)] }.join + "-" + rand(9).to_s
     
       begin
-        @json_response = @cv.create_sip_account(self.exten, self.phone_owner + "" + self.exten, self.cv_password)
+        @json_response = @cv.create_sip_account(self.exten.to_s, self.phone_owner + "" + self.exten.to_s, self.cv_password)
         self.cv_id ||= @json_response["endpoint"]["id"]
         logger.info("Creating SIP phone with cloudvox id " + self.cv_id.to_s)
       rescue Exception => e
@@ -44,6 +51,7 @@ class Phone < Ohm::Model
       end
     end
     
+    # if we got an ID back from cloudvox, save the other info to the phone object
     if self.cv_id
       self.cv_extension = @json_response["endpoint"]["extension"]
       self.cv_username =  @json_response["endpoint"]["full_username"]
@@ -128,5 +136,18 @@ class Phone < Ohm::Model
   def username
     User.username_for(self.phone_owner)
   end
+  
+  protected
+    def assign_sip_exten
+      if self.is_sip?
+        @sip_phones = Phone.find(:type => "sip")
+        self.exten = 1
+        @sip_phones.each do |sip_phone|
+          if self.exten <= (sip_phone.exten.to_i)
+            self.exten = (sip_phone.exten.to_i) + 1
+          end
+        end
+      end
+    end
   
 end

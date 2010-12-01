@@ -3,6 +3,8 @@ require 'digest/sha1'
 require 'app/helpers/cloudvox_sip'
 
 class User < Ohm::Model
+  include Ohm::Callbacks
+  
   class WrongUsername < ArgumentError; end
   class WrongPassword < ArgumentError; end
   class CloudvoxAppError < StandardError; end
@@ -39,12 +41,12 @@ class User < Ohm::Model
     write_local(:password, value)
   end
   
-  #def create
-  #  @cv = Cloudvox.new
-  #  
-  #  @json_response = @cv.create_app(user.id, self.phone_owner + "" + self.exten, self.cv_password)
-  #  
-  #end
+  def after_create
+    @cv = Cloudvox.new
+    
+    @json_response = @cv.create_app(self.id, "agi://www.llama.fm/v/incoming.json")
+    logger.debug(@json_response.to_s)
+  end
   
   # returns an array of Voicemails for this user
   def voicemails
