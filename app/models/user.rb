@@ -4,6 +4,7 @@ require 'app/helpers/cloudvox_sip'
 
 class User < Ohm::Model
   include Ohm::Callbacks
+  include Ohm::WebValidations
   
   class WrongUsername < ArgumentError; end
   class WrongPassword < ArgumentError; end
@@ -24,6 +25,7 @@ class User < Ohm::Model
   
   def validate
     assert_unique :username
+    assert_email :username
   end
   
   def self.authenticate(username, password)
@@ -41,12 +43,12 @@ class User < Ohm::Model
     write_local(:password, value)
   end
   
-  def after_create
-    @cv = Cloudvox.new
-    
-    @json_response = @cv.create_app(self.id, "agi://www.llama.fm/v/incoming.json")
-    logger.debug(@json_response.to_s)
-  end
+  # def after_create
+  #   @cv = Cloudvox.new
+  #   
+  #   @json_response = @cv.create_app(self.id, "agi://www.llama.fm/v/incoming.json")
+  #   logger.debug(@json_response.to_s)
+  # end
   
   # returns an array of Voicemails for this user
   def voicemails

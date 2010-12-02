@@ -7,16 +7,17 @@
 		%li
 			= "Someone else owns the username '#{@user.username}'."
 			%a(href="/login?username=#{@user.username}") Maybe it's you?
-	- error.on [:password, :not_present], "We won't be able to authenticate you if you don't provide a password"
+	- error.on [:username, :not_email], "You must provide a valid email address."
+	- error.on [:password, :not_present], "We won't be able to authenticate you if you don't provide a password."
 
 %form(action="/signup" method="post")
 	%p
-		%label(for="user_username") Choose a username
+		%label(for="user_username") Email address
 		%br
 		%input(type="text" name="user[username]" id="user_username" value="#{@user.username}")/
 
 	%p
-		%label(for="user_password") And a password
+		%label(for="user_password") And password
 		%br
 		%input(type="password" name="user[password]" id="user_password")/
 

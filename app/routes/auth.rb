@@ -37,7 +37,7 @@ class Main
       logger.info("User creation successful. Redirecting to homepage.")
       redirect "/", 303
     rescue
-      logger.info("Username already exists. Displaying signup page with error.")
+      logger.info("User already exists. Displaying signup page with error.")
       haml :"signup"
     end    
   end
