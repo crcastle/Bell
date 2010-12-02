@@ -1,26 +1,26 @@
-- @title = @name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : "(unverified)")
+- @title = @phone.name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : " (unverified)")
 - @verified = @phone.verified? ? "(verified)" : (@phone.is_sip? ? "" : link_to_verify("(unverified)", @phone))
 - @disabled = (@phone.verified? || @phone.is_sip?) ? "disabled" : nil
 
 %h1
-	Edit phone: #{@name}
+	Edit phone: #{@phone.name}
 	!= @verified
 	
 - errors_on @phone do |error|
 	- error.on [:name, :not_present], "Please provide a name."
-	- error.on [:exten, :not_present], "Please provide a phone number."
+	- error.on [:exten, :not_us_phone], "Please provide a U.S. phone number with only numeric characters."
 	- error.on [:type, :not_present], "Please select a phone type."	
 
 %form(action="/phones/#{@phone.id}" method="post")
+	%input(type="hidden" name="_method" value="put")
 	%p
 		%label(for="phone_type") Type
 		%span.example e.g. Mobile, landline, or SIP? (question mark link to explain these types)
 		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_mobile", :value => "mobile", :checked => @phone.is_mobile? ? true : nil, :disabled => @disabled} Mobile
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_land", :value => "land", :checked => @phone.is_land? ? true : nil, :disabled => @disabled} Landline
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_sip", :value => "sip", :checked => @phone.is_sip? ? true : nil, :disabled => @disabled} SIP
+		%select{:name => "phone[type]", :disabled => @disabled}
+			%option{:value => "mobile", :selected => @phone.is_mobile?} Mobile
+			%option{:value => "land", :selected => @phone.is_land?} Landline
+			%option{:value => "sip", :selected => @phone.is_sip?} SIP
 
 	%p
 		%label(for="phone_name") Name
@@ -34,6 +34,22 @@
 		%br
 		%input{:name => "phone[exten]", :id => "phone_exten", :value => "#{@phone.exten}", :disabled => @disabled}
 	
+	- if @phone.is_sip?
+		%p
+			%label(for="phone_cv_domain") SIP Domain
+			%br
+			%input{:name => "phone[cv_domain]", :id => "phone_cv_domain", :value => "#{@phone.cv_domain}", :disabled => true}
+
+		%p
+			%label(for="phone_cv_username") SIP ID
+			%br
+			%input{:name => "phone[cv_username]", :id => "phone_cv_username", :value => "#{@phone.cv_username}", :disabled => true}
+
+		%p
+			%label(for="phone_cv_password") SIP Password
+			%br
+			%input{:name => "phone[cv_password]", :id => "phone_cv_password", :value => "#{@phone.cv_password}", :disabled => true}
+		
 	%p
 		%button(type="submit")
 			Submit

@@ -2,7 +2,7 @@
 
 - errors_on @phone do |error|
 	- error.on [:name, :not_present], "Please provide a name."
-	- #error.on [:exten, :not_present], "Please provide a phone number."
+	- error.on [:exten, :not_us_phone], "Please provide a U.S. phone number with only numeric characters."
 	- error.on [:type, :not_present], "Please select a phone type."
 
 %form(action="/phones" method="post")
@@ -10,12 +10,11 @@
 		%label(for="phone_type") Type
 		%span.example e.g. Mobile, landline, or SIP?  (question mark test to explain this)
 		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_mobile", :value => "mobile", :checked => @phone.type == "mobile" ? true : nil} Mobile
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_land", :value => "land", :checked => @phone.type == "land" ? true : nil} Landline
-		%br
-		%input{:type => "radio", :name => "phone[type]", :id => "phone_type_sip", :value => "sip", :checked => @phone.type == "sip" ? true : nil} SIP
-	
+		%select{:name => "phone[type]"}
+			%option{:value => "mobile", :selected => @phone.is_mobile?} Mobile
+			%option{:value => "land", :selected => @phone.is_land?} Landline
+			%option{:value => "sip", :selected => @phone.is_sip?} SIP
+			
 	%p
 		%label(for="phone_name") Name
 		%span.example e.g. "Chris's mobile phone"
@@ -24,7 +23,7 @@
 		
 	%p
 		%label(for="phone_exten") Phone Number
-		%span.example e.g. 16178235295 or blank if SIP
+		%span.example 11-digit U.S. phone number (e.g. 16178235295) or blank for SIP phones
 		%br
 		%input(name="phone[exten]" id="phone_exten" value="#{@phone.exten}")
 		

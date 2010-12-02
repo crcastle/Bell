@@ -10,7 +10,7 @@ class Main
   end
   
   # add a new number to an account
-  post "/numbers/?" do
+  put "/numbers/?" do
     accept_login_or_signup
     
     @number = Number.find(:did => params[:number][:did]).first
@@ -77,7 +77,7 @@ class Main
     haml :"numbers/id"
   end
   
-  post "/numbers/:id/?" do
+  put "/numbers/:id/?" do
     accept_login_or_signup
     
     @number = Number[params[:id]]

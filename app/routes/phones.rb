@@ -55,7 +55,7 @@ class Main
   end
   
   # update a phone
-  post "/phones/:id/?" do
+  put "/phones/:id/?" do
     accept_login_or_signup
     
     @phone = Phone[params[:id]]
@@ -67,12 +67,9 @@ class Main
       redirect "/phones"
     end
     
-    @phone.name = params[:phone][:name]
-    @phone.exten = params[:phone][:exten]
-    @phone.type = params[:phone][:type]
-    
-    if @phone.valid?
-      @phone.save
+    if @phone.update( :name => params[:phone][:name],
+                      :exten => params[:phone][:exten],
+                      :type => params[:phone][:type])
       session[:notice] = "Phone has been modified."
       redirect "/phones"
     else

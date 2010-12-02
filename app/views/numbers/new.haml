@@ -1,6 +1,7 @@
 %h1 Purchase a new number
 
 %form(action="/numbers" method="post")
+	%input(type="hidden" name="_method" value="put")
 	%p
 		%label(for="number_did") Number
 		%span.example Choose an available number

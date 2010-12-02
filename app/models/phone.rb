@@ -2,6 +2,8 @@
 # could be either a SIP phone or PSTN phone
 class Phone < Ohm::Model
   include Ohm::Callbacks
+  include Ohm::NumberValidations
+  
   class CloudvoxSipError < StandardError; end
   
   attribute :type # "sip" or "regular"
@@ -26,7 +28,7 @@ class Phone < Ohm::Model
     super
     
     assert_present :type
-    assert_present :exten if (self.is_mobile? || self.is_land?)
+    assert_us_phone :exten if (self.is_mobile? || self.is_land?)
     assert_unique :exten if :type == "sip"
     assert_present :name
     assert_numeric :phone_owner

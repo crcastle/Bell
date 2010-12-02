@@ -10,8 +10,9 @@
 	!= @state
 	
 %form(action="/numbers/#{@id}" method="post")
+	%input(type="hidden" name="_method" value="put")
 	%p
-		%button(type="submit")
+		%button(type="submit" onclick="return confirm('Are you sure you want to remove this number from your account?')")
 			Remove from my account
 		%button(type="button" onclick="javascript:document.location = '/numbers'")
 			Cancel
