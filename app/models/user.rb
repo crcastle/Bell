@@ -83,7 +83,7 @@ class User < Ohm::Model
   end
   
   def admin?
-    (self.admin == "true") ? true : false
+    (self.admin == "true" || self.user_id1?) ? true : false
   end
       
   def make_admin!
