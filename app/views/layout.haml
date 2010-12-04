@@ -38,10 +38,25 @@
 							%a(href="/voicemails") Voicemails
 						%li
 							%a(href="/history") Call History
+						- if current_user.admin?
+							%br
+							%h3 Admin Menu
+							%ul
+								%li
+									%a(href="/admin/users") Users
+								%li
+									%a(href="/admin/phones") Phones
+								%li
+									%a(href="/admin/numbers") Numbers
+								%li
+									%a(href="/admin/voicemails") Voicemails
 				%article#ex_main
 					- if session[:notice]
 						.notices
 							= session.delete(:notice)
+					- if session[:error]
+						.errors
+							= session.delete(:error)
 					!= yield
 					.clear
 				%footer#ex_footer

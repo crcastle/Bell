@@ -19,7 +19,7 @@ _Note that this is an unfinished experimental phone management app. Use at your 
 +	Change POST routes that delete data to DELETE route  
 +	Change username to email address  
 - 	Require at least 6 character password
--	Finish admin interface buildout  
++	Finish admin interface buildout  
 *	Change "attribute" to "reference" to represent relationship between user and phone and user and number
 *	Improve UI for number provisioning page  
 *	Incorporate Cloudvox number list on number provisioning page  

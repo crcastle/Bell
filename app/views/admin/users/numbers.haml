@@ -1,0 +1,60 @@
+- if @numbers.any?
+
+	%h1
+		Numbers for
+		!= @numbers.first.username
+
+	%table(cellspacing="0")
+		%thead
+			%tr.odd
+				%th ID
+				%th Number
+				%th State
+				%th Available
+				%th Owner
+		%tbody
+			- @row_count = 0
+			- @numbers.each do |number|
+				%tr{:class => (@row_count % 2 == 0) ? "even" : "odd"}
+					- @row_count += 1
+					%td
+						!= number.id
+					%td
+						!= link_to(format_number(number),"/admin/numbers/#{number.id}")
+					%td
+						!= number.state
+					%td
+						!= number.available? ? "yes" : "no"
+					%td
+						!= number.username
+					%td
+						%form(action="/admin/users/#{number.did_owner}/numbers/#{number.id}" method="post")
+							%input(type="hidden" name="_method" value="put")
+							%input(type="submit" value="Unassign")
+- else
+	%h2
+		This user has no numbers.
+%br
+%br
+%h2 Assign a new number to this user
+
+%form(action="/admin/numbers" method="post")
+	%input(type="hidden" name="_method" value="put")
+	%p
+		%label(for="number_did") Number
+		%span.example Choose an available number
+		%br
+		- if @all_numbers.any?
+			%select(name="number[did]" id="number_did")
+		
+				- @all_numbers.each do |number|
+					!= number_option number
+					
+					%input(type="hidden" name="number[id]" id="number_id" value="#{number.id}")
+					%input(type="hidden" name="number[did_owner]" id="number_did_owner" value="#{params[:id]}")
+			%p
+				%button(type="submit")
+					Assign
+			
+		- else
+			%p Howdy crap! No numbers available right now. Please check back later.

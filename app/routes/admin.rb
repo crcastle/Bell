@@ -33,12 +33,12 @@ class Main
     require_admin
     
     @user = User[params[:id]]
-    
+        
     if @user.update(params[:user])
       session[:notice] = "User updated."
       redirect "/admin/users"
     else
-      session[:error] = "Error updating user."
+      session[:error] = "Something's invalid. User not updated."
       haml :"admin/users/id"
     end
   end
@@ -58,8 +58,10 @@ class Main
     require_admin
     
     @phones = Phone.find(:phone_owner => params[:id])
+    @phone = Phone.new
+    @phone.phone_owner = params[:id]
     
-    # display som haml
+    haml :"admin/users/phones"
   end
   
   # list a user's numbers
@@ -67,8 +69,23 @@ class Main
     require_admin
     
     @numbers = Number.find(:did_owner => params[:id])
+    @all_numbers = Number.find(:did_owner => nil)
     
-    # display some haml
+    haml :"/admin/users/numbers"
+  end
+  
+  put '/admin/users/:id/numbers/:nid/?' do
+    require_admin
+
+    @number = Number[params[:nid]]
+    
+    if @number.update(:did_owner => nil)
+      session[:notice] = "Number unassigned."
+      redirect '/admin/users/' + params[:id].to_s + '/numbers'
+    else
+      session[:error] = "Something's invalid. Number not unassigned."
+      haml :"admin/users/numbers"
+    end
   end
   
   # list all phones
@@ -189,6 +206,22 @@ class Main
     haml :"admin/numbers/id"
   end
   
+  # assign number to user
+  put '/admin/numbers' do
+    require_admin
+    
+    @id = params[:number][:id]
+    @number = Number[@id]
+    
+    if @number.update(params[:number])
+      session[:notice] = "Number assigned."
+      redirect '/admin/users/' + params[:number][:did_owner].to_s + "/numbers"
+    else
+      session[:error] = "Something's invalid. Number not assigned."
+      haml :"admin/users/" + params[:number][:did_owner].to_s + "/numbers/" + @id.to_s
+    end
+  end
+  
   # update number
   put '/admin/numbers/:id/?' do
     require_admin
@@ -218,6 +251,22 @@ class Main
     
     session[:notice] = "Number deleted."
     redirect '/admin/numbers'
+  end
+  
+  get '/admin/voicemails/?' do
+    require_admin
+    
+    @voicemails = Voicemail.all
+    
+    haml :"admin/voicemails"
+  end
+  
+  get '/admin/voicemails/:id/?' do
+    require_admin
+    
+    @voicemail = Voicemail[params[:id]]
+    
+    haml :"admin/voicemails"
   end
   
   helpers do

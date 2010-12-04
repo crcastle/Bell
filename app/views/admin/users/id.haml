@@ -1,0 +1,38 @@
+- @title = @user
+
+%h1 User details for #{@user}
+
+%p
+	Phones:
+	!= link_to(@user.phones.size.to_s, "/admin/users/#{@user.id}/phones")
+%p
+	Numbers:
+	!= link_to(@user.numbers.size.to_s, "/admin/users/#{@user.id}/numbers")
+%p
+	Voicemails:
+	!= link_to(@user.voicemails.size.to_s, "/admin/users/#{@user.id}/voicemails")
+	
+
+%form(action="/admin/users/#{@user.id}" method="post")
+	%input(type="hidden" name="_method" value="put")
+	%p
+		%label(for="user_username") Email address
+		%span.example Must be an email address
+		%br
+		%input(name="user[username]" id="user_username" value="#{@user.username}")
+		
+	%p
+		%label(for="user_admin") Role
+		%span.example CAREFUL!
+		%br
+		%input{:type => "radio", :name => "user[admin]", :id => "user_admin", :value => "nil", :checked => !@user.admin?} User
+		%input{:type => "radio", :name => "user[admin]", :id => "user_admin", :value => "true", :checked => @user.admin?} Admin
+		
+	%p
+		%button(type="submit")
+			Submit
+%form(action="/admin/users/#{@user.id}" method="post")
+	%p
+		%input(type="hidden" name="_method" value="delete")
+		%button(type="submit" onclick="return confirm('Are you sure you want to delete this user?')")
+			Delete User
