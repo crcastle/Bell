@@ -17,8 +17,8 @@
 					%td
 						!= link_to user.username, "/admin/users/#{user.id}"
 					%td
-						!= user.phones.size
+						!= link_to user.phones.size, "/admin/users/#{user.id}/phones"
 					%td
-						!= user.numbers.size
+						!= link_to user.numbers.size, "/admin/users/#{user.id}/numbers"
 					%td
-						!= user.voicemails.size
+						!= link_to user.voicemails.size, "/admin/users/#{user.id}/voicemails"
