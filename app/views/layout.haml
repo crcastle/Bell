@@ -38,7 +38,7 @@
 							%a(href="/voicemails") Voicemails
 						%li
 							%a(href="/history") Call History
-						- if current_user.admin?
+						- if logged_in? && current_user.admin?
 							%br
 							%h3 Admin Menu
 							%ul
