@@ -27,6 +27,7 @@
 		%span.example 1, 2, 3, ...
 		%br
 		%input(name="number[did_owner]" id="number_did_owner" value="#{@number.did_owner}")
+		!= @number.did_owner ? link_to("Owner Info", "/admin/users/#{@number.did_owner}") : ""
 	%p
 		%button(type="submit")
 			Submit

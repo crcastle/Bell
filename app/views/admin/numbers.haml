@@ -15,10 +15,37 @@
 					%td
 						!= number.id
 					%td
-						!= format_number number
+						!= link_to(format_number(number),"/admin/numbers/#{number.id}")
 					%td
 						!= number.state
 					%td
 						!= number.available? ? "yes" : "no"
 					%td
 						!= number.username
+%br
+%br
+%h2 Add a new number to the system
+
+%form(action="/admin/numbers" method="post")
+	%p
+		%label(for="number_did") Number
+		%span.example Enter a number
+		%br
+		%input(name="number[did]" id="number_did" value="#{@number.did}")
+		
+	%p
+		%label(for="number_state") State
+		%span.example e.g. WA, CT, CA, etc.
+		%br
+		%input(name="number[state]" id="number_state" value="#{@number.state}")
+		
+	%p
+		%label(for="number_area_code") Area Code
+		%span.example e.g. 206, 860, 415, etc.
+		%br
+		%input(name="number[area_code]" id="number_area_code" value="#{@number.area_code}")
+		
+	%p
+		%button(type="submit")
+			Submit
+

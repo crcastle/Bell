@@ -16,7 +16,7 @@
 					%td
 						!= phone.id
 					%td
-						!= link_to_phone phone
+						!= link_to phone.name, "/admin/phones/#{phone.id}"
 					%td
 						!= phone.type
 					%td
@@ -25,3 +25,46 @@
 						!= phone.verified? ? "Yes" : phone.verifyable? ? link_to_verify("No", phone) : "Not needed"
 					%td
 						!= phone.username
+%br
+%br
+%h2 Register a new phone
+
+- errors_on @phone do |error|
+	- error.on [:name, :not_present], "Please provide a name."
+	- error.on [:exten, :not_us_phone], "Please provide a U.S. phone number with only numeric characters."
+	- error.on [:type, :not_present], "Please select a phone type."
+	- error.on [:phone_owner, :not_present], "Please provide a phone owner."
+	- error.on [:phone_owner, :not_numeric], "Phone owner must be numberic."
+
+%form(action="/admin/phones" method="post")
+	%p
+		%label(for="phone_type") Type
+		%span.example e.g. Mobile, landline, or SIP?  (question mark test to explain this)
+		%br
+		%select{:name => "phone[type]"}
+			%option{:value => "mobile", :selected => @phone.is_mobile?} Mobile
+			%option{:value => "land", :selected => @phone.is_land?} Landline
+			%option{:value => "sip", :selected => @phone.is_sip?} SIP
+
+	%p
+		%label(for="phone_name") Name
+		%span.example e.g. "Chris's mobile phone"
+		%br
+		%input(name="phone[name]" id="phone_name" value="#{@phone.name}")
+
+	%p
+		%label(for="phone_exten") Phone Number
+		%span.example 11-digit U.S. phone number (e.g. 16178235295) or blank for SIP phones
+		%br
+		%input(name="phone[exten]" id="phone_exten" value="#{@phone.exten}")
+
+	%p
+		%label(for="phone_phone_owner") Owner ID
+		%span.example 1, 2, 3, ...
+		%br
+		%input(name="phone[phone_owner]" id="phone_phone_owner" value="#{@phone.phone_owner}")
+
+	%p
+		%button(type="submit")
+			Submit
+

@@ -1,0 +1,77 @@
+- @title = @phone.name + (@phone.verified? ? "" : (@phone.is_sip?) ? "" : " (unverified)")
+- @verified = @phone.verified? ? "(verified)" : (@phone.is_sip? ? "" : "(unverified)")
+- @disabled = (@phone.verified? || @phone.is_sip?) ? "disabled" : nil
+
+%h1
+	Edit phone: #{@phone.name}
+	!= @verified
+	
+- errors_on @phone do |error|
+	- error.on [:name, :not_present], "Please provide a name."
+	- error.on [:exten, :not_us_phone], "Please provide a U.S. phone number with only numeric characters."
+	- error.on [:type, :not_present], "Please select a valid phone type."
+	- error.on [:type, :not_member], "Please select a valid phone type."
+
+%form(action="/admin/phones/#{@phone.id}" method="post")
+	%input(type="hidden" name="_method" value="put")
+	%p
+		%label(for="phone_type") Type
+		%span.example e.g. Mobile, landline, or SIP? (question mark link to explain these types)
+		%br
+		%select{:name => "phone[type]", :disabled => @disabled}
+			%option{:value => "mobile", :selected => @phone.is_mobile?} Mobile
+			%option{:value => "land", :selected => @phone.is_land?} Landline
+			%option{:value => "sip", :selected => @phone.is_sip?} SIP
+
+	%p
+		%label(for="phone_name") Name
+		%span.example e.g. "Chris's mobile phone"
+		%br
+		%input(name="phone[name]" id="phone_name" value="#{@phone.name}")
+	
+	%p
+		%label(for="phone_exten") Extension or Phone Number
+		%span.example e.g. 16178235295 or 85
+		%br
+		%input{:name => "phone[exten]", :id => "phone_exten", :value => "#{@phone.exten}", :disabled => @disabled}
+
+	%p
+		%label(for="phone_phone_owner") Owner ID
+		%span.example 1, 2, 3, ...
+		%br
+		%input(name="phone[phone_owner]" id="phone_phone_owner" value="#{@phone.phone_owner}")
+		!= @phone.phone_owner ? link_to("Owner Info", "/admin/users/#{@phone.phone_owner}") : ""
+	
+	- if @phone.is_sip?
+		%p
+			%label(for="phone_cv_domain") SIP Domain
+			%br
+			%input{:name => "phone[cv_domain]", :id => "phone_cv_domain", :value => "#{@phone.cv_domain}", :disabled => true}
+
+		%p
+			%label(for="phone_cv_username") SIP ID
+			%br
+			%input{:name => "phone[cv_username]", :id => "phone_cv_username", :value => "#{@phone.cv_username}", :disabled => true}
+
+		%p
+			%label(for="phone_cv_password") SIP Password
+			%br
+			%input{:name => "phone[cv_password]", :id => "phone_cv_password", :value => "#{@phone.cv_password}", :disabled => true}
+		
+	%p
+		%button(type="submit")
+			Submit
+		%button(type="button" onclick="javascript:document.location = '/admin/phones'")
+			Cancel
+%form(action="/admin/phones/#{@phone.id}" method="post")
+	%p
+		%input(type="hidden" name="_method" value="delete")
+		%button(type="submit" onclick="return confirm('Are you sure you want to delete this phone?')")
+			Delete Phone
+-if @phone.verifyable?
+	%form(action="/admin/phones/#{@phone.id}/verify" method="post")
+		%p
+			%input(type="hidden" name="_method" value="put")
+			%button(type="submit" onclick="return confirm('Are you sure you want to verify/unverify this phone?')")
+				!= @phone.verified? ? "UN-Verify Phone" : "Verify Phone"
+			

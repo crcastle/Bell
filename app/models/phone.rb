@@ -3,6 +3,7 @@
 class Phone < Ohm::Model
   include Ohm::Callbacks
   include Ohm::NumberValidations
+  include Ohm::ExtraValidations
   
   class CloudvoxSipError < StandardError; end
   
@@ -27,11 +28,11 @@ class Phone < Ohm::Model
   def validate
     super
     
-    assert_present :type
     assert_us_phone :exten if (self.is_mobile? || self.is_land?)
     assert_unique :exten if :type == "sip"
     assert_present :name
     assert_numeric :phone_owner
+    assert_member :type, ["sip", "mobile", "land"]
   end
     
   def create
@@ -88,6 +89,11 @@ class Phone < Ohm::Model
     self.save if self.valid?
   end
   
+  def unverify!
+    self.verified = nil
+    self.save if self.valid?
+  end
+  
   def verified?
     self.verified
   end
@@ -141,7 +147,7 @@ class Phone < Ohm::Model
   
   protected
     def assign_sip_exten
-      if self.is_sip?
+      if self.is_sip? && ! self.exten
         @sip_phones = Phone.find(:type => "sip")
         self.exten = 1
         @sip_phones.each do |sip_phone|

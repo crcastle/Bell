@@ -5,6 +5,7 @@ require 'app/helpers/cloudvox_sip'
 class User < Ohm::Model
   include Ohm::Callbacks
   include Ohm::WebValidations
+  include Ohm::LengthValidations
   
   class WrongUsername < ArgumentError; end
   class WrongPassword < ArgumentError; end
@@ -23,7 +24,7 @@ class User < Ohm::Model
   
   index :username
   
-  def validate
+  def validate    
     assert_unique :username
     assert_email :username
   end
@@ -37,6 +38,8 @@ class User < Ohm::Model
   
   def password=(value)
     write_local(:salt, encrypt(Time.now.to_s, ""))
+    
+    assert_min_length :password, 6 # TODO: this is not working
     
     value = value.empty? ? nil : encrypt(value, salt)
     

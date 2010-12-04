@@ -24,5 +24,11 @@ class Main
     def partial(template, locals = {})
       haml(template, {:layout => false}, locals)
     end
+    
+    def link_to(text, url)
+      capture_haml do
+        haml_tag(:a, text, :href => url, :name => text)
+      end
+    end
   end
 end
