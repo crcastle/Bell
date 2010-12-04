@@ -109,6 +109,10 @@ private
   end
   
   def userid_1?
-    self.id == "1" ? true : false
+    if self
+      self.id == "1" ? true : false
+    else
+      false
+    end
   end
 end
